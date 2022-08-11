@@ -1,7 +1,9 @@
 class SiswaModel {
   String gender;
   String nama;
-  String kota;
+  String pesan;
+  String waktu;
+  int jumlah;
 
-  SiswaModel(this.gender, this.nama, this.kota);
+  SiswaModel(this.gender, this.nama, this.pesan, this.waktu, this.jumlah);
 }

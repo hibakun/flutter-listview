@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_listview/widgets/item_siswa.dart';
-import '../models/siswa_model.dart';
+import 'package:flutter_listview/widgets/chat.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,47 +8,60 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  List<SiswaModel> data = [
-    SiswaModel("L", "Adhanafi Ilyasa Sutejo", "Jakarta"),
-    SiswaModel("L", "Ahmad Aziz Wira Widodo", "Jepara"),
-    SiswaModel("L", "Akbar Rizqullah Putra Susanto", "Semarang"),
-    SiswaModel("L", "Alwan Athallah Mumtaz", "Depok"),
-    SiswaModel("L", "Amri Iqro Samudra Al-Fatihah", "NTB"),
-    SiswaModel("L", "Anakku Lanang Sejati Adli", "Kudus"),
-    SiswaModel("L", "Andika Setya Eka Natha", "Kudus"),
-    SiswaModel("L", "Antariksa Kusuma Harmawan", "Kudus"),
-    SiswaModel("P", "Azzra Rienov Fahlivi", "Depok"),
-    SiswaModel("L", "Bayu Septian Kurniawan", "Kudus"),
-    SiswaModel("L", "Bhre Nabil Faeyza", "Bogor"),
-    SiswaModel("L", "Bimo Adi Bramantyo", "Jakarta"),
-    SiswaModel("L", "Daffa Syauqi Syarif", "Kudus"),
-    SiswaModel("L", "Danar Gading", "Jakarta"),
-    SiswaModel("L", "Dimas Bagus Adityas", "Kudus"),
-    SiswaModel("L", "Firdaus Hafidz Al-Kaff", "Demak"),
-    SiswaModel("L", "Hegel Al Rafli", "Temanggung"),
-    SiswaModel("L", "Hibatullah Fawwaz Hana", "Kudus"),
-    SiswaModel("L", "Mikhail Haqeen", "Bekasi"),
-    SiswaModel("P", "Wulan Febrianti", "NTB"),
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _controller;
+  int _selectedIndex = 0;
+
+  List<Widget> _list = [
+    Tab(
+      text: "CHATS",
+    ),
+    Tab(
+      text: "STATUS",
+    ),
+    Tab(
+      text: "CALLS",
+    ),
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _controller = TabController(length: _list.length, vsync: this);
+
+    _controller.addListener(() {
+      setState(() {
+        _selectedIndex = _controller.index;
+      });
+      print("Selected Index: " + _controller.index.toString());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("ListView"),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("ListView"),
+        bottom: TabBar(
+          tabs: _list,
+          controller: _controller,
+          onTap: (index) {},
         ),
-        body: ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ItemSiswa(
-              gender: data[index].gender,
-              nama: data[index].nama,
-              kota: data[index].kota,
-            );
-          },
-        ),
+        elevation: 0,
+      ),
+      body: TabBarView(
+        controller: _controller,
+        children: [
+          Chat(),
+          Center(
+            child: Text(_selectedIndex.toString()),
+          ),
+          Center(
+            child: Text(_selectedIndex.toString()),
+          ),
+        ],
       ),
     );
   }
